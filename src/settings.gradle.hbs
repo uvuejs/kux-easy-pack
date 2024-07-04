@@ -1,0 +1,33 @@
+pluginManagement {
+	repositories {
+		flatDir {
+			dirs 'libs'
+		}
+		google()
+		mavenCentral()
+		gradlePluginPortal()
+		{{#each repositories.maven}}
+		maven { url '{{this}}' }
+		{{/each}}
+	}
+}
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+        maven { url = uri("https://jitpack.io") }
+		{{#each repositories.maven}}
+		maven { url '{{this}}' }
+		{{/each}}
+        flatDir {
+            dirs('./plugins/')
+        }
+    }
+}
+rootProject.name = "{{appName}}-app"
+include ':app'
+include ':uniappx'
+{{#each plugins}}
+include '{{this}}'
+{{/each}}

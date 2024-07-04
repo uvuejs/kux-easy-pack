@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
+	package="{{package}}">
+	
+	{{#each permissions}}
+	<uses-permission android:name="{{this}}" />
+	{{/each}}
+	{{#each features}}
+	<uses-feature android:name="{{this}}" />
+	{{/each}}
+	
+	<application
+		android:name="io.dcloud.application.DCloudApplication"
+		android:allowClearUserData="true"
+		android:icon="@drawable/icon"
+		android:label="@string/app_name"
+		android:largeHeap="true"
+		android:debuggable="true"
+		>
+		
+		<activity
+			android:name="io.dcloud.PandoraEntry"
+			android:configChanges="orientation|keyboardHidden|keyboard|navigation"
+			android:label="@string/app_name"
+			android:launchMode="singleTask"
+			android:hardwareAccelerated="true"
+			android:theme="@style/TranslucentTheme"
+			android:screenOrientation="user"
+			android:windowSoftInputMode="adjustResize" >
+			<intent-filter>
+				<action android:name="android.intent.action.MAIN" />
+				<category android:name="android.intent.category.LAUNCHER" />
+			</intent-filter>
+			{{#if module.push.unipush.enabled}}
+			<intent-filter>
+				<action android:name="android.intent.action.VIEW"/>
+				<category android:name="android.intent.category.DEFAULT" />
+				<category android:name="android.intent.category.BROWSABLE" />
+				<data android:host="io.dcloud.unipush" android:path="/" android:scheme="unipush" />
+			</intent-filter>
+			{{/if}}
+			{{#if module.push.oppo.enabled}}
+			<intent-filter>
+				<action android:name="android.intent.action.oppopush" />
+				<category android:name="android.intent.category.DEFAULT" />
+			</intent-filter>
+			{{/if}}
+		</activity>
+		
+		{{#each metaData}}
+		<meta-data
+			android:name="{{name}}"
+			android:value="{{value}}" />
+		{{/each}}
+		
+		{{#each services}}
+		<service
+			android:name="{{name}}"
+			{{#if enabled}}
+			android:enabled="{{enabled}}"
+			{{/if}}
+			{{#if process}}
+			android:process="{{process}}"
+			{{/if}}
+			{{#if exported}}
+			android:exported="{{exported}}"
+			{{/if}}
+			/>
+		{{/each}}
+		
+		{{#if module.push.fcm}}
+		<service
+			android:name="io.dcloud.feature.fcm.FCMVendorService"
+			android:exported="false">
+			<intent-filter>
+				<action android:name="com.google.firebase.MESSAGING_EVENT" />
+			</intent-filter>
+		</service>
+		{{/if}}
+		
+		{{#if module.activity.wechat}}
+		<activity
+			android:name=".wxapi.WXEntryActivity"
+			android:exported="true"
+			android:label="@string/app_name"
+			android:launchMode="singleTop">
+			<intent-filter>
+				<action android:name="android.intent.action.VIEW" />
+				<category android:name="android.intent.category.DEFAULT" />
+				<data android:scheme="{{module.wechat.APPID}}" />
+			</intent-filter>
+		</activity>
+		{{/if}}
+		
+		{{#if module.activity.qq}}
+		<activity 
+			android:name="com.tencent.tauth.AuthActivity" 
+			android:launchMode="singleTask" 
+			android:noHistory="true">
+			<intent-filter>
+				<action android:name="android.intent.action.VIEW"/>
+				<category android:name="android.intent.category.DEFAULT" />
+				<category android:name="android.intent.category.BROWSABLE" />
+				<data android:scheme="{{module.qq.APPID}}" />
+			</intent-filter>
+		</activity>
+		<activity 
+			android:name="com.tencent.connect.common.AssistActivity" 
+			android:theme="@android:style/Theme.Translucent.NoTitleBar" 
+			android:screenOrientation="portrait" />
+		{{/if}}
+		
+		{{#if module.activity.weibo}}
+		<activity
+			android:name="com.sina.weibo.sdk.web.WeiboSdkWebActivity"
+			android:configChanges="keyboardHidden|orientation"
+			android:exported="false"
+			android:windowSoftInputMode="adjustResize" />
+		{{/if}}
+		
+		{{#if module.share.weibo}}
+		<activity
+			android:name="com.sina.weibo.sdk.share.WbShareTransActivity"
+			android:launchMode="singleTask"
+			android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen">
+			<intent-filter>
+				<action android:name="com.sina.weibo.sdk.action.ACTION_SDK_REQ_ACTIVITY" />
+				<category android:name="android.intent.category.DEFAULT" />
+			</intent-filter>
+		</activity>
+		{{/if}}
+		
+		{{#if module.oauth.xiaomi}}
+		<activity android:name="com.xiaomi.account.openauth.AuthorizeActivity" />
+		{{/if}}
+		
+		{{#if module.payment.wxchat}}
+		<activity
+			android:name="io.dcloud.feature.payment.weixin.WXPayProcessMeadiatorActivity"
+			android:exported="false"
+			android:excludeFromRecents="true"
+			android:theme="@style/ProjectDialogTheme" />
+		<activity
+			android:name=".wxapi.WXPayEntryActivity"
+			android:exported="true"
+			android:theme="@android:style/Theme.Translucent.NoTitleBar"
+			android:launchMode="singleTop" />
+		{{/if}}
+		
+		{{#if module.payment.paypal}}
+		<activity
+			android:name="com.paypal.openid.RedirectUriReceiverActivity"
+			android:excludeFromRecents="true"
+			android:exported="true"
+			android:theme="@style/PYPLAppTheme">
+			<intent-filter>
+				<action android:name="android.intent.action.VIEW" />
+				<category android:name="android.intent.category.DEFAULT" />
+				<category android:name="android.intent.category.BROWSABLE" />
+				<data android:host="paypalpay" android:scheme="{{module.payment.paypal.SCHEME}}" />
+			</intent-filter>
+		</activity>
+		<activity
+			android:name="com.paypal.pyplcheckout.home.view.activities.PYPLInitiateCheckoutActivity"
+			android:exported="true"
+			android:theme="@style/AppFullScreenTheme">
+			<intent-filter android:autoVerify="true">
+				<action android:name="android.intent.action.VIEW" />
+				<category android:name="android.intent.category.DEFAULT" />
+				<category android:name="android.intent.category.BROWSABLE" />
+				<data android:host="paypalxo" android:scheme="{{module.payment.paypal.SCHEME}}" />
+			</intent-filter>
+		</activity>
+		{{/if}}
+		
+		{{#if module.payment.stripe}}
+		<activity
+			android:name="io.dcloud.feature.payment.stripe.TransparentActivity"
+			android:excludeFromRecents="true"
+			android:exported="false"
+			android:theme="@style/TranslucentTheme" />
+		{{/if}}
+		
+		{{#if module.uniad}}
+		<provider
+			android:name="com.bytedance.sdk.openadsdk.TTFileProvider"
+			android:authorities=".TTFileProvider"
+			android:exported="false"
+			android:grantUriPermissions="true">
+			<meta-data
+				android:name="android.support.FILE_PROVIDER_PATHS"
+				android:resource="@xml/file_paths"
+				tools:replace="android:resource" />
+		</provider>
+		<provider
+			android:name="com.bytedance.sdk.openadsdk.multipro.TTMultiProvider"
+			android:authorities=".TTMultiProvider"
+			android:exported="false" />
+		{{/if}}
+	</application>
+		
+		

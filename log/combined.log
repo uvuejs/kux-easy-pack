@@ -1,0 +1,19 @@
+2024-07-04 19:59:44 [WARN:] 【检查插件版本异常】AxiosError: Unsupported protocol htttp:
+    at dispatchHttpRequest (/Users/yunlailuo/work/kux/kux-easy-pack-hxp/node_modules/axios/dist/node/axios.cjs:2764:21)
+    at /Users/yunlailuo/work/kux/kux-easy-pack-hxp/node_modules/axios/dist/node/axios.cjs:2641:5
+    at new Promise (<anonymous>)
+    at wrapAsync (/Users/yunlailuo/work/kux/kux-easy-pack-hxp/node_modules/axios/dist/node/axios.cjs:2621:10)
+    at http (/Users/yunlailuo/work/kux/kux-easy-pack-hxp/node_modules/axios/dist/node/axios.cjs:2659:10)
+    at Axios.dispatchRequest (/Users/yunlailuo/work/kux/kux-easy-pack-hxp/node_modules/axios/dist/node/axios.cjs:4072:10)
+    at Axios._request (/Users/yunlailuo/work/kux/kux-easy-pack-hxp/node_modules/axios/dist/node/axios.cjs:4352:33)
+    at Axios.request (/Users/yunlailuo/work/kux/kux-easy-pack-hxp/node_modules/axios/dist/node/axios.cjs:4219:25)
+    at Axios.<computed> [as get] (/Users/yunlailuo/work/kux/kux-easy-pack-hxp/node_modules/axios/dist/node/axios.cjs:4378:17)
+    at Function.wrap [as get] (/Users/yunlailuo/work/kux/kux-easy-pack-hxp/node_modules/axios/dist/node/axios.cjs:28:15)
+    at Object.activate (/Users/yunlailuo/work/kux/kux-easy-pack-hxp/extension.js:11:8)
+    at f (/Applications/HBuilderX-Alpha.app/Contents/HBuilderX/plugins/plugin-manager/out.js:1:381218)
+    at /Applications/HBuilderX-Alpha.app/Contents/HBuilderX/plugins/plugin-manager/out.js:1:382208
+    at /Applications/HBuilderX-Alpha.app/Contents/HBuilderX/plugins/plugin-manager/out.js:1:351625
+    at /Applications/HBuilderX-Alpha.app/Contents/HBuilderX/plugins/plugin-manager/out.js:1:352699
+    at Immediate.<anonymous> (/Applications/HBuilderX-Alpha.app/Contents/HBuilderX/plugins/plugin-manager/out.js:1:355084)
+    at Axios.request (/Users/yunlailuo/work/kux/kux-easy-pack-hxp/node_modules/axios/dist/node/axios.cjs:4224:41)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)

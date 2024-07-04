@@ -1,0 +1,5 @@
+node_modules
+debug-kux-plus-base-as
+SDK/uniappx/*
+.env
+build

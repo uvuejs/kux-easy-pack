@@ -1,0 +1,225 @@
+{{#each applyPlugins}}
+apply plugin: '{{this}}'
+{{/each}}
+
+plugins {
+    id 'com.android.application'
+	{{#if project.uniapp}}
+	{{else}}
+	id 'org.jetbrains.kotlin.android'
+	{{/if}}
+}
+
+android {
+    {{#if packageName}}
+    namespace '{{packageName}}'
+    {{else}}
+    namespace 'cn.uvuejs.app'
+    {{/if}}
+	{{#if project.uniapp}}
+	compileSdkVersion 30
+	buildToolsVersion '30.0.3'
+	{{else}}
+	compileSdk 34
+	{{/if}}
+	
+	buildFeatures {
+		{{#if buildFeatures.buildConfig}}
+		buildConfig {{buildFeatures.buildConfig}}
+		{{else}}
+		buildConfig false
+		{{/if}}
+	}
+
+    defaultConfig {
+        {{#if packageName}}
+        applicationId '{{packageName}}'
+        {{else}}
+        applicationId 'cn.uvuejs.app'
+        {{/if}}
+        {{#if minSdkVersion}}
+        minSdk {{minSdkVersion}}
+        {{else}}
+        minSdk 21
+        {{/if}}
+        targetSdk 30
+        {{#if versionCode}}
+        versionCode {{versionCode}}
+        {{else}}
+        versionCode 100
+        {{/if}}
+        {{#if versionName}}
+        versionName '{{versionName}}'
+        {{else}}
+        versionName '1.0.0'
+        {{/if}}
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
+
+        {{#each defaultConfig.buildConfigField}}
+        buildConfigField {{{this}}}
+        {{/each}}
+		
+		{{#if project.uniapp}}
+		multiDexEnabled true
+		{{/if}}
+
+        ndk {
+            {{#if abis}}
+            abiFilters {{{abis}}}
+            {{/if}}
+        }
+
+        {{#if defaultConfig.allowManifestPlaceholders}}
+        manifestPlaceholders = [
+            {{#if defaultConfig.manifestPlaceholders.GETUI_APPID}}
+            "GETUI_APPID" : "{{defaultConfig.manifestPlaceholders.GETUI_APPID}}",
+            {{/if}}
+            {{#if defaultConfig.manifestPlaceholders.GY_APP_ID}}
+            "GY_APP_ID" : "{{defaultConfig.manifestPlaceholders.GY_APP_ID}}",
+            {{/if}}
+            {{#if defaultConfig.manifestPlaceholders.PUSH_APPID}}
+            "PUSH_APPID" : "{{defaultConfig.manifestPlaceholders.PUSH_APPID}}",
+            {{/if}}
+            {{#if defaultConfig.manifestPlaceholders.dcloud_unipush_auto_notification}}
+            "dcloud_unipush_auto_notification" : {{defaultConfig.manifestPlaceholders.dcloud_unipush_auto_notification}},
+            {{/if}}
+            {{#if defaultConfig.manifestPlaceholders.MIPUSH_APPID}}
+            "MIPUSH_APPID" : "{{defaultConfig.manifestPlaceholders.MIPUSH_APPID}}",
+            {{/if}}
+            {{#if defaultConfig.manifestPlaceholders.MIPUSH_APPKEY}}
+            "MIPUSH_APPKEY" : "{{defaultConfig.manifestPlaceholders.MIPUSH_APPKEY}}",
+            {{/if}}
+            {{#if defaultConfig.manifestPlaceholders.MEIZUPUSH_APPID}}
+            "MEIZUPUSH_APPID" : "{{defaultConfig.manifestPlaceholders.MEIZUPUSH_APPID}}",
+            {{/if}}
+            {{#if defaultConfig.manifestPlaceholders.MEIZUPUSH_APPKEY}}
+            "MEIZUPUSH_APPKEY" : "{{defaultConfig.manifestPlaceholders.MEIZUPUSH_APPKEY}}",
+            {{/if}}
+            {{#if defaultConfig.manifestPlaceholders.OPPOPUSH_APPKEY}}
+            "OPPOPUSH_APPKEY" : "{{defaultConfig.manifestPlaceholders.OPPOPUSH_APPKEY}}",
+            {{/if}}
+            {{#if defaultConfig.manifestPlaceholders.OPPOPUSH_APPSECRET}}
+            "OPPOPUSH_APPSECRET" : "{{defaultConfig.manifestPlaceholders.OPPOPUSH_APPSECRET}}",
+            {{/if}}
+            {{#if defaultConfig.manifestPlaceholders.HUAWEI_APPID}}
+            "com.huawei.hms.client.appid" : "{{defaultConfig.manifestPlaceholders.HUAWEI_APPID}}",
+            {{/if}}
+            {{#if defaultConfig.manifestPlaceholders.VIVO_APPID}}
+            "com.vivo.push.app_id" : "{{defaultConfig.manifestPlaceholders.VIVO_APPID}}",
+            {{/if}}
+            {{#if defaultConfig.manifestPlaceholders.VIVO_APIKEY}}
+            "com.vivo.push.api_key" : "{{defaultConfig.manifestPlaceholders.VIVO_APIKEY}}",
+            {{/if}}
+            {{#if defaultConfig.manifestPlaceholders.HIHONOR_APPID}}
+            "com.hihonor.push.app_id" : "{{defaultConfig.manifestPlaceholders.HIHONOR_APPID}}"
+            {{/if}}
+			{{#if defaultConfig.manifestPlaceholders.apkApplicationId}}
+			"apk.applicationId" : "{{defaultConfig.manifestPlaceholders.apkApplicationId}}"
+			{{/if}}
+			{{#if defaultConfig.manifestPlaceholders.plusUnipushAppid}}
+			"plus.unipush.appid" : "{{defaultConfig.manifestPlaceholders.plusUnipushAppid}}"
+			{{/if}}
+			{{#if defaultConfig.manifestPlaceholders.plusUnipushAppkey}}
+			"plus.unipush.appkey" : "{{defaultConfig.manifestPlaceholders.plusUnipushAppkey}}"
+			{{/if}}
+			{{#if defaultConfig.manifestPlaceholders.plusUnipushAppsecret}}
+			"plus.unipush.appsecret" : "{{defaultConfig.manifestPlaceholders.plusUnipushAppsecret}}"
+			{{/if}}
+        ]
+        {{/if}}
+    }
+
+    signingConfigs {
+        config {
+            storeFile file("../app/debug.keystore")
+            {{#if localPack}}
+            storePassword "{{keyStore.storePassword}}"
+            keyAlias "{{keyStore.keyAlias}}"
+            keyPassword "{{keyStore.keyPassword}}"
+            {{else}}
+            storePassword System.getenv("ORG_GRADLE_PROJECT_DEBUG_STORE_PASSWORD")
+            keyAlias System.getenv("ORG_GRADLE_PROJECT_DEBUG_KEY_ALIAS")
+            keyPassword System.getenv("ORG_GRADLE_PROJECT_DEBUG_KEY_PASSWORD")
+            {{/if}}
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+			signingConfig signingConfigs.config
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+
+        debug {
+			minifyEnabled false
+            signingConfig signingConfigs.config
+			proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+	{{#if project.uniapp}}
+	lintOptions {
+	    checkReleaseBuilds false
+	    abortOnError false
+	}
+	{{else}}
+	compileOptions {
+	    sourceCompatibility JavaVersion.VERSION_1_8
+	    targetCompatibility JavaVersion.VERSION_1_8
+	}
+	
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+	{{/if}}
+
+    aaptOptions {
+        additionalParameters '--auto-add-overlay'
+        ignoreAssetsPattern '!.svn:!.git:.*:!CVS:!thumbs.db:!picasa.ini:!*.scc:*~'
+    }
+}
+
+{{#if project.uniapp}}
+repositories {
+    flatDir {
+        dirs 'libs'
+    }
+}
+{{/if}}
+
+dependencies {
+	implementation fileTree(include: ['*.aar', '*.jar'], dir: './libs')
+	{{#if project.uniapp}}
+	implementation 'androidx.recyclerview:recyclerview:1.1.0'
+	implementation 'com.facebook.fresco:fresco:2.5.0'
+	implementation "com.facebook.fresco:animated-gif:2.5.0"
+	{{#if project.debug}}
+	implementation 'com.github.bumptech.glide:glide:4.9.0'
+	implementation 'com.alibaba:fastjson:1.2.83'
+	implementation 'androidx.webkit:webkit:1.3.0'
+	implementation 'androidx.appcompat:appcompat:1.1.0'
+	implementation 'androidx.localbroadcastmanager:localbroadcastmanager:1.0.0'
+	implementation 'androidx.core:core:1.1.0'
+	implementation "androidx.fragment:fragment:1.1.0"
+	{{/if}}
+	{{else}}
+    implementation 'androidx.core:core-ktx:1.12.0'
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'com.google.android.material:material:1.11.0'
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+    implementation project(':uniappx')
+    implementation fileTree(include: ['*.aar', '*.jar'], dir: '../uniappx/libs')
+    implementation "com.squareup.okhttp3:okhttp:3.12.12"
+	{{/if}}
+	{{#each dependencies.project}}
+	implementation project('{{this}}')
+	{{/each}}
+    {{#each dependencies.default}}
+    implementation '{{this}}'
+    {{/each}}
+}

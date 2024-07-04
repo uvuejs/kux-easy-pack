@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools">
+    <application android:name="io.dcloud.uniapp.UniApplication">
+        <activity android:name="io.dcloud.uniapp.UniAppActivity" android:configChanges="orientation|keyboard|keyboardHidden|smallestScreenSize|screenLayout|screenSize|mcc|mnc|fontScale|navigation|uiMode" android:exported="true" android:screenOrientation="portrait" android:theme="@style/UniAppX.Activity.DefaultTheme" android:windowSoftInputMode="adjustResize" tools:replace="android:exported,android:theme,android:configChanges,android:windowSoftInputMode,android:screenOrientation">
+        </activity>
+        <meta-data android:name="DCLOUD_UNI_APPID" android:value="__UNI__E775E7C"/>
+    </application>
+</manifest>
